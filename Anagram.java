@@ -29,16 +29,36 @@ public class Anagram {
 
 	// Returns true if the two given strings are anagrams, false otherwise.
 	public static boolean isAnagram(String str1, String str2) {
-		String testd1 = removeSpaces(preProcess(str1));
-        String testd2 = removeSpaces(preProcess(str2));
-        int len = testd1.length();
-        for (int i = 0; i < len; i++) {
-            if (testd2.indexOf(testd1.charAt(i)) == -1 || testd1.indexOf(testd2.charAt(i)) == -1) {
+		String string1 = preProcess(str1);
+        String string2 = preProcess(str2);
+        Boolean checker = false;
+        String newString1 = "";
+        String newString2 = "";
+        for(int i = 0; i < string1.length(); i++) {
+            if (string1.charAt(i) != ' ') {
+                newString1 += string1.charAt(i);
+            }
+        } for(int i = 0; i < string2.length(); i++) {
+            if (string2.charAt(i) != ' ') {
+                newString2 += string2.charAt(i);
+            }
+        }
+        if (newString1.length() != newString2.length()) {
+            return false;
+        }
+        for (int i = 0; i < newString1.length(); i++) {
+            checker = false;
+            for (int j = 0; j < newString2.length(); j++) {
+                if (string1.charAt(i) == string2.charAt(j)) {
+                    checker = true;
+                    string2 = string2.substring(0, j) + string2.substring(j + 1);
+                    break;
+                }
+            }
+            if (checker == false) {
                 return false;
             }
         }
-
-
         return true;
 
 	}
@@ -48,16 +68,17 @@ public class Anagram {
 	// as is. For example, the string "What? No way!" becomes "whatnoway"
 	public static String preProcess(String str) {
 		String clean = "";
+		char ch;
     for (int i = 0; i < str.length(); i++) {
-        char ch = str.charAt(i);
+        ch = str.charAt(i);
         int intChar = (int) ch;
-
-        
         if ((intChar >= 65 && intChar <= 90)) { 
             clean += (char) (intChar + 32); 
         } else if (intChar >= 97 && intChar <= 122) { 
             clean += ch; 
-        }
+        } else if (intChar == ' ') {
+			clean += ch; 
+		}
       
     }
     return clean;
@@ -79,19 +100,5 @@ public class Anagram {
 
         return cleaString;
 	}
-
-	public static String removeSpaces(String str){
-        String tempString = "";
-        str = str.toLowerCase();
-        for (int i = 0; i < str.length(); i++) {
-            char ch = str.charAt(i);
-            if ((ch <= 'z' && ch >= 'a') || (ch >= '0' && ch <= '9')) {
-				tempString  += + ch;
-            }
-
-        }
-        
-        return tempString ;
-    
     }
-}
+
