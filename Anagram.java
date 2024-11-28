@@ -29,31 +29,18 @@ public class Anagram {
 
 	// Returns true if the two given strings are anagrams, false otherwise.
 	public static boolean isAnagram(String str1, String str2) {
+		String testd1 = removeSpaces(preProcess(str1));
+        String testd2 = removeSpaces(preProcess(str2));
+        int len = testd1.length();
+        for (int i = 0; i < len; i++) {
+            if (testd2.indexOf(testd1.charAt(i)) == -1 || testd1.indexOf(testd2.charAt(i)) == -1) {
+                return false;
+            }
+        }
 
-		if (str1.length() != str2.length())   return false;
-        
-		String temp1 = preProcess(str1);
-		String temp2 = preProcess(str2);
-		
-
-		char[] cTemp1 = new char[temp1.length()];
-		char[] cTemp2 = new char[temp2.length()];
-
-			for (int i = 0; i < temp1.length(); i++) {
-				boolean checking1 = false;
-				for (int j = 0; j < temp1.length(); j++) {
-					if(cTemp1[i] == cTemp2[j] || cTemp1[i] != ' ' || cTemp2[j] != ' '){
-						checking1 = true;
-						cTemp1[i] = ' ';
-						cTemp2[j] = ' ';
-					
-					} 
-					if ( checking1 == false ) return false;
-				}
-			
-			}
 
         return true;
+
 	}
 	   
 	// Returns a preprocessed version of the given string: all the letter characters are converted
@@ -61,34 +48,50 @@ public class Anagram {
 	// as is. For example, the string "What? No way!" becomes "whatnoway"
 	public static String preProcess(String str) {
 		String clean = "";
-		char temp;
-		for (int i = 0; i < str.length(); i++) {
-		if(((int) str.charAt(i)) > 96 && ((int) str.charAt(i)) < 123 || str.charAt(i)==' '){
-			clean += str.charAt(i);
-		} else if(((int) str.charAt(i)) > 64 && ((int) str.charAt(i)) < 91){
-			temp = (char) ((int)str.charAt(i) + 32); 
-			clean += ((char) temp);
-		} 
-	}
-	return clean;
+    for (int i = 0; i < str.length(); i++) {
+        char ch = str.charAt(i);
+        int intChar = (int) ch;
+
+        
+        if ((intChar >= 65 && intChar <= 90)) { 
+            clean += (char) (intChar + 32); 
+        } else if (intChar >= 97 && intChar <= 122) { 
+            clean += ch; 
+        }
+      
+    }
+    return clean;
 }
 	// Returns a random anagram of the given string. The random anagram consists of the same
 	// characters as the given string, re-arranged in a random order. 
 	public static String randomAnagram(String str) {
-		String mixed = "";
-		char[] toMixed = new char[str.length()];
-		for (int i = 0; i < str.length(); i++) toMixed[i] = ' ';
 
-	
-		for (int i = 0; i < str.length(); i++) {
-			int j = (int) (Math.random() * str.length());
-			if(toMixed[j] == ' '){
-				toMixed[j] = str.charAt(i);
-			}
-		}
-		for (int i = 0; i < str.length(); i++) mixed += toMixed[i];
-		
-		
-		return mixed;
+        String cleaString = "";
+		String tempString = preProcess(str);
+
+        while (tempString .length() > 0) {
+            int tmp_index = (int) (tempString .length() * Math.random());
+
+            cleaString += tempString .charAt(tmp_index);
+            tempString  = tempString .substring(0, tmp_index) + tempString .substring(tmp_index + 1, tempString .length());
+
+        }
+
+        return cleaString;
 	}
+
+	public static String removeSpaces(String str){
+        String tempString = "";
+        str = str.toLowerCase();
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if ((ch <= 'z' && ch >= 'a') || (ch >= '0' && ch <= '9')) {
+				tempString  += + ch;
+            }
+
+        }
+        
+        return tempString ;
+    
+    }
 }
